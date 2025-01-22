@@ -177,13 +177,6 @@ public class LinkedList {
         }
         return getNode(index).block;
     }
-
-    /**
-     * Gets the index of the node pointing to the given memory block.
-     *
-     * @param block the given memory block
-     * @return the index of the block, or -1 if the block is not in this list
-     */
     public int indexOf(MemoryBlock block) {
         //// Replace the following statement with your code
         Node current = first;
@@ -195,6 +188,14 @@ public class LinkedList {
         }
         return -1;
     }
+
+    /**
+     * Gets the index of the node pointing to the given memory block.
+     *
+     * @param block the given memory block
+     * @return the index of the block, or -1 if the block is not in this list
+     */
+
 
     /**
      * Removes the given node from this list.
@@ -251,17 +252,13 @@ public class LinkedList {
      * @throws IllegalArgumentException if the given memory block is not in this list
      */
     public void remove(MemoryBlock block) {
-        //// Write your code here
-        Node current = first;
-        for (int i = 0; i < size; i++) {
-            if (current.block.equals(block)) {
-                remove(i);
-                return;
-            }
-            current = current.next;
-        }
-        throw new IllegalArgumentException("The given memory block is not in this list");
+        int index = indexOf(block);
+        if (index == -1)
+            throw new IllegalArgumentException("index must be between 0 and size");
+
+        remove(index);
     }
+
 
     /**
      * Returns an iterator over this list, starting with the first element.
