@@ -98,6 +98,8 @@ public class MemorySpace {
 	 */
 	public void free(int address) {
 		//// Write your code here
+		if (allocatedList.getSize() == 0)
+			throw new IllegalArgumentException("index must be between 0 and size");
 		ListIterator iterator = allocatedList.iterator();
 		while (iterator.hasNext()) {
 			MemoryBlock block = iterator.next();
