@@ -66,7 +66,7 @@ public class LinkedList {
      * @throws IllegalArgumentException if index is negative or greater than the list's size
      */
     public Node getNode(int index) {
-        if (index < 0 || index > size) {
+        if (index < 0 || index >= size) {
             throw new IllegalArgumentException(
                     "index must be between 0 and size");
         }
@@ -94,7 +94,7 @@ public class LinkedList {
      * @throws IllegalArgumentException if index is negative or greater than the list's size
      */
     public void add(int index, MemoryBlock block) {
-        if (index < 0 || index > size) {
+        if (index < 0 || index >= size) {
             throw new IllegalArgumentException(
                     "index must be between 0 and size");
         }
@@ -171,18 +171,11 @@ public class LinkedList {
      */
     public MemoryBlock getBlock(int index) {
         //// Replace the following statement with your code
-        if (index < 0 || index > size) {
+        if (index < 0 || index >= size) {
             throw new IllegalArgumentException(
                     "index must be between 0 and size");
         }
-        if (size == 0) {
-            throw new IllegalArgumentException("The list is empty");
-        }
-        Node current = first;
-        for (int i = 0; i < index; i++) {
-            current = current.next;
-        }
-        return current.block;
+        return getNode(index).block;
     }
 
     /**
@@ -209,7 +202,6 @@ public class LinkedList {
      * @param node the node that will be removed from this list
      */
     public void remove(Node node) {
-        //Edge Cases: List is empty, or node is null
         if (node == null)
             throw new NullPointerException("node must not be null");
         if (size == 0)
@@ -245,7 +237,7 @@ public class LinkedList {
      */
     public void remove(int index) {
         //// Write your code here
-        if (index < 0 || index > size) {
+        if (index < 0 || index >= size) {
             throw new IllegalArgumentException(
                     "index must be between 0 and size");
         }
