@@ -4,6 +4,15 @@
  * used, respectively, for creating new blocks and recycling existing blocks.
  */
 public class MemorySpace {
+
+	public static void main (String[] args) {
+		MemorySpace m = new MemorySpace(1000);
+		System.out.println(m + "\n");
+		m.malloc(10);
+		m.malloc(10);
+		m.malloc(10);
+		System.out.println(m + "\n");
+	}
 	
 	// A list of the memory blocks that are presently allocated
 	private LinkedList allocatedList;
@@ -59,6 +68,23 @@ public class MemorySpace {
 	 */
 	public int malloc(int length) {		
 		//// Replace the following statement with your code
+		ListIterator iterator = freeList.iterator();
+		while (iterator.hasNext()) {
+			MemoryBlock block = iterator.next();
+			if (block.length >= length) {
+				if (block.length == length) {
+					freeList.remove(block);
+					allocatedList.addLast(block);
+					return block.baseAddress;
+				} else {
+					MemoryBlock allocatedBlock = new MemoryBlock(block.baseAddress, length);
+					allocatedList.addLast(allocatedBlock);
+					block.baseAddress+= length;
+					block.length -= length;
+					return allocatedBlock.baseAddress;
+				}
+			}
+		}
 		return -1;
 	}
 
@@ -72,6 +98,15 @@ public class MemorySpace {
 	 */
 	public void free(int address) {
 		//// Write your code here
+		ListIterator iterator = allocatedList.iterator();
+		while (iterator.hasNext()) {
+			MemoryBlock block = iterator.next();
+			if (block.baseAddress == address) {
+				allocatedList.remove(block);
+				freeList.addLast(block);
+				return;
+			}
+		}
 	}
 	
 	/**
@@ -88,7 +123,40 @@ public class MemorySpace {
 	 * In this implementation Malloc does not call defrag.
 	 */
 	public void defrag() {
-		/// TODO: Implement defrag test
-		//// Write your code here
+		freeList = sortFreeListByAddr();
+
+		Node currentNode = freeList.getFirst();
+		while (currentNode != null && currentNode.next != null) {
+			MemoryBlock currentBlock = currentNode.block;
+			MemoryBlock nextBlock = currentNode.next.block;
+
+			// Merge adjacent blocks
+			if (currentBlock.baseAddress + currentBlock.length == nextBlock.baseAddress) {
+				currentBlock.length += nextBlock.length;
+				freeList.remove(nextBlock);
+			} else {
+				currentNode = currentNode.next;
+			}
+		}
 	}
-}
+
+	private LinkedList sortFreeListByAddr() {
+		LinkedList sortedList = new LinkedList();
+		while (freeList.getSize() > 0) {
+			Node smallestNode = freeList.getFirst();
+			Node currentNode = freeList.getFirst();
+
+			while (currentNode != null) {
+				if (currentNode.block.baseAddress < smallestNode.block.baseAddress) {
+					smallestNode = currentNode;
+				}
+				currentNode = currentNode.next;
+			}
+
+			freeList.remove(smallestNode.block);
+			sortedList.addLast(smallestNode.block);
+		}
+		return sortedList;
+	}
+	}
+

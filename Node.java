@@ -15,6 +15,8 @@ public class Node {
 	public Node(MemoryBlock block) {
 		this.block = block;
 	}
+
+
 	
 	/**
 	 * A textual representation of this node, for debugging.
