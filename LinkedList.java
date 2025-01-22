@@ -94,23 +94,22 @@ public class LinkedList {
      * @throws IllegalArgumentException if index is negative or greater than the list's size
      */
     public void add(int index, MemoryBlock block) {
-        if (index < 0 || index >= size) {
-            throw new IllegalArgumentException(
-                    "index must be between 0 and size");
+        Node addedNode = new Node(block);
+        if (index < 0 || index > size) {
+            throw new IllegalArgumentException("index must be between 0 and size");
         }
-        Node newNode = new Node(block);
-        if (index == 0) { // Insert the node first
-            newNode.next = first;
-            first = newNode;
-            if (size == 0) // Edge Case: List is Empty
-                last = newNode;
+        if (index == 0) {
+            addedNode.next = first;
+            first = addedNode;
+            if (size == 0)
+                last = addedNode;
         }
-        else if (index == size) { // Insert the node last
+        else if (index == size) {
             if (last != null)
-                last.next = newNode;
-            last = newNode;
-            if (size == 0) // Edge Case: List is empty
-                first = newNode;
+                last.next = addedNode;
+            last = addedNode;
+            if (size == 0)
+                first = addedNode;
         }
 
         else {
@@ -120,8 +119,8 @@ public class LinkedList {
                 current = current.next;
                 counter++;
             }
-            newNode.next = current.next;
-            current.next = newNode;
+            addedNode.next = current.next;
+            current.next = addedNode;
         }
         size++;
     }
